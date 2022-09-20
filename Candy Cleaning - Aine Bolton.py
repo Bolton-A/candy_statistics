@@ -65,6 +65,7 @@ def main():
     # Remove unnecessary leading substrings.
     candy.columns = candy.columns.str.lstrip("Q6 | ")
     candy.columns = candy.columns.str.lstrip("Q2: ")
+    candy.columns = candy.columns.str.lstrip("Q3: ")
 
     # ----- Candys to be implemented in a later version.
     # (These candies all had problems with browsing accented letters and certain punctuation.)
@@ -102,8 +103,13 @@ def main():
 
     # Drops columns that do not match the website's list.
     for column in candy.columns:
-        if not (column in title.lower()) and (column != "gender"):
+        if not (column in title.lower()) and (column != "gender") and (column != "age"):
             candy = candy.drop(column, axis = 1)
+
+    # Sets all ages that are not null or junk to integers.
+    candy = candy[~candy['age'].isnull()]
+    candy = candy[candy['age'].str.isnumeric()]
+    candy['age'] = candy['age'].astype(int)
 
     #####################################################
     # Section Three: Statistics generation.
@@ -188,6 +194,28 @@ def main():
         print("# of Men who are Indifferent To Them:", maleMeh, "\nPercentage:", round((maleMeh/maleTotal), 2), "%")
         print("# of Men who Despise Them:", maleDespair, "\nPercentage:", round((maleDespair/maleTotal), 2), "%")
         print()
+
+        ##### Age breakdown of enjoying candy type.
+
+        ### Child
+        numChild = len(candy[(candy['age'] > 0) & (candy['age'] <= 14)])
+        childJoy = len(candy[((candy['age'] > 0) & (candy['age'] <= 14)) & (candy[currentlySearch] == 'JOY')])
+        print("# of Children (1 to 14) who Enjoy Them:", childJoy, "\nPercentage:", round((childJoy/numChild), 2), "%")
+
+        ### Youth
+        numYouth = len(candy[(candy['age'] >= 15) & (candy['age'] <= 24)])
+        youthJoy = len(candy[((candy['age'] >= 15) & (candy['age'] <= 24)) & (candy[currentlySearch] == 'JOY')])
+        print("# of Youths (15 to 24) who Enjoy Them:", youthJoy, "\nPercentage:", round((youthJoy/numYouth), 2), "%")
+
+        ### Adult
+        numAdult = len(candy[(candy['age'] >= 25) & (candy['age'] <= 64)])
+        adultJoy = len(candy[((candy['age'] >= 25) & (candy['age'] <= 64)) & (candy[currentlySearch] == 'JOY')])
+        print("# of Adults (25 to 64) who Enjoy Them:", adultJoy, "\nPercentage:", round((adultJoy/numAdult), 2), "%")
+
+        ### Senior
+        numSenior = len(candy[candy['age'] >= 65])
+        seniorJoy = len(candy[(candy['age'] >= 65) & (candy[currentlySearch] == 'JOY')])
+        print("# of Seniors (65+) who Enjoy Them:", seniorJoy, "\nPercentage:", round((seniorJoy/numSenior), 2), "%")
 
         # Used to allow user to read presented information before repeating.
         input("Press Enter to continue...")

@@ -1,7 +1,7 @@
 '''
-
-Aine Bolton
-September 15th, 2022
+Candy Cleaning - Current Version 1.3 (Updated 09/20/2022)
+Developer: Aine Bolton
+Started: September 15th, 2022
 Purpose: This program was created to practice data-cleaning CSV (Excel) files through Python.
 
 Function: Gathers data from candyhierarchy2017 CSV file. Uses the junkfoodblog alphabetical candy

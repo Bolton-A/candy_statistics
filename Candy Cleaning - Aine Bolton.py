@@ -62,8 +62,9 @@ def main():
     # Section Two: Data cleaning and comparing.
     #####################################################
 
-    # Remove unnecessary leading substring.
+    # Remove unnecessary leading substrings.
     candy.columns = candy.columns.str.lstrip("Q6 | ")
+    candy.columns = candy.columns.str.lstrip("Q2: ")
 
     # ----- Candys to be implemented in a later version.
     # (These candies all had problems with browsing accented letters and certain punctuation.)
@@ -101,7 +102,7 @@ def main():
 
     # Drops columns that do not match the website's list.
     for column in candy.columns:
-        if not (column in title.lower()):
+        if not (column in title.lower()) and (column != "gender"):
             candy = candy.drop(column, axis = 1)
 
     #####################################################
@@ -128,6 +129,7 @@ def main():
         for column in candy.columns:
             if (fuzz.ratio(searchCandy, column)) > 75:
                 matches = matches + 1
+                print("**************************************************")
                 print(column, "Statistics")
                 currentlySearch = column
         
@@ -137,7 +139,7 @@ def main():
             input("Press Enter to continue...")
             continue
 
-        ##### Enjoy/indifferent/dislike/Non-answer.
+        ##### Enjoy/indifferent/dislike/non-answer.
 
         # Total people who enjoy the candy.
         joyVal = candy[currentlySearch].str.contains('JOY').sum()
@@ -155,8 +157,37 @@ def main():
         print("# of People Who Enjoy Them:", joyVal, "\nPercentage:", round((joyVal/totalVal), 2), "%")
         print("# of People who are Indifferent To Them:", mehVal, "\nPercentage:", round((mehVal/totalVal), 2), "%")
         print("# of People who Despise Them:", despairVal, "\nPercentage:", round((despairVal/totalVal), 2), "%")
+        print()
 
-        print(candy.columns)
+        ##### Gender breakdown of enjoy/indifferent/dislike/non-answer.
+
+        # Calculate how many women (like/indifferent/dislike) the candy.
+        femaleJoy = len(candy[(candy['gender'] == 'Female') & (candy[currentlySearch] == 'JOY')])
+        femaleMeh = len(candy[(candy['gender'] == 'Female') & (candy[currentlySearch] == 'MEH')])
+        femaleDespair = len(candy[(candy['gender'] == 'Female') & (candy[currentlySearch] == 'DESPAIR')])
+
+        # Used to filter out women who did not answer for the candy.
+        femaleTotal = femaleJoy + femaleMeh + femaleDespair
+
+        # Calculate how many women (like/indifferent/dislike) the candy.
+        maleJoy = len(candy[(candy['gender'] == 'Male') & (candy[currentlySearch] == 'JOY')])
+        maleMeh = len(candy[(candy['gender'] == 'Male') & (candy[currentlySearch] == 'MEH')])
+        maleDespair = len(candy[(candy['gender'] == 'Male') & (candy[currentlySearch] == 'DESPAIR')])
+
+        # Used to filter out men who did not answer for the candy.
+        maleTotal = maleJoy + maleMeh + maleDespair
+
+        # Display # and % of women who responded for each (like/indifferent/dislike).
+        print("# of Women who Enjoy Them:", femaleJoy, "\nPercentage:", round((femaleJoy/femaleTotal), 2), "%")
+        print("# of Women who are Indifferent To Them:", femaleMeh, "\nPercentage:", round((femaleMeh/femaleTotal), 2), "%")
+        print("# of Women who Despise Them:", femaleDespair, "\nPercentage:", round((femaleDespair/femaleTotal), 2), "%")
+        print()
+
+        # Display # and % of men who responded for each (like/indifferent/dislike).
+        print("# of Men who Enjoy Them:", maleJoy, "\nPercentage:", round((maleJoy/maleTotal), 2), "%")
+        print("# of Men who are Indifferent To Them:", maleMeh, "\nPercentage:", round((maleMeh/maleTotal), 2), "%")
+        print("# of Men who Despise Them:", maleDespair, "\nPercentage:", round((maleDespair/maleTotal), 2), "%")
+        print()
 
         # Used to allow user to read presented information before repeating.
         input("Press Enter to continue...")

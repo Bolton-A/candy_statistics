@@ -34,6 +34,8 @@ After organizing the column titles and filtering only candy, allows the user to 
 - M/F breakdown of people who enjoy the candy.
 - M/F breakdown of people who are indifferent to the candy.
 - M/F breakdown of people who dislike the candy.
+#### Age breakdown of specific candy preferences. (Added in version 1.3)
+- How much each age group enjoys the candy.
 
 
 ## Setup
@@ -59,11 +61,6 @@ In the future, I plan to extend the amount of statistics reported for each candy
 - Bonkers, Cadburry Creme Eggs, Chick-o-Sticks, Good N' Plenty, Hershey's Milk Chocolate, Jolly Ranchers (multiple variations), M&Ms (multiple variations), Kinder, Licorice (multiple variations), Mint Kisses, Mint Juleps, Now & Laters, Reese’s Pieces, Reggie Jackson Bar, Sweetums, & Three Musketeers.
 
 ### To-do Statistic Features:
-#### Age breakdown of specific candy preferences.
-- Average age of people who enjoy the candy.
-- Average age of people who are indifferent to the candy.
-- Average age of people who dislike the candy.
-
 #### Regional breakdown of specific candy preferences.
 - Country with the highest percentage of people who enjoy the candy.
 - Country with the highest percentage people who are indifferent to the candy.

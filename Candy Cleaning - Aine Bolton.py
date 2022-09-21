@@ -1,7 +1,7 @@
 '''
-Candy Cleaning - Current Version 1.3 (Updated 09/20/2022)
-Developer: Aine Bolton
-Started: September 15th, 2022
+
+Aine Bolton
+September 15th, 2022
 Purpose: This program was created to practice data-cleaning CSV (Excel) files through Python.
 
 Function: Gathers data from candyhierarchy2017 CSV file. Uses the junkfoodblog alphabetical candy
@@ -56,7 +56,7 @@ def main():
         title = re.sub(r'<.*?>', '', str(title))
 
     # Use pandas to open CSV file.
-    candy = pandas.read_csv(r'C:\Users\bolto\Desktop\Candy\candyhierarchy2017.csv', encoding = "ISO-8859-1")
+    candy = pandas.read_csv(r'candyhierarchy2017.csv', encoding = "ISO-8859-1")
 
     #####################################################
     # Section Two: Data cleaning and comparing.
@@ -147,22 +147,23 @@ def main():
 
         ##### Enjoy/indifferent/dislike/non-answer.
 
-        # Total people who enjoy the candy.
+        # Total people who (like/indifferent/dislike) the candy.
         joyVal = candy[currentlySearch].str.contains('JOY').sum()
-
-        # Total people who are indifferent to the candy.
         mehVal = candy[currentlySearch].str.contains('MEH').sum()
-
-        # Total people who dislike the candy.
         despairVal = candy[currentlySearch].str.contains('DESPAIR').sum()
 
         # Total of people who responded.
         totalVal = joyVal + mehVal + despairVal
 
+        # Creates rounded percentages of people who (like/indifferent/dislike) the candy.
+        roundJoyVal = round((joyVal/totalVal), 2)
+        roundMehVal = round((mehVal/totalVal), 2)
+        roundDespairVal = round((despairVal/totalVal), 2)
+
         # Display # and % of people who responded for each (like/indifferent/dislike).
-        print("# of People Who Enjoy Them:", joyVal, "\nPercentage:", round((joyVal/totalVal), 2), "%")
-        print("# of People who are Indifferent To Them:", mehVal, "\nPercentage:", round((mehVal/totalVal), 2), "%")
-        print("# of People who Despise Them:", despairVal, "\nPercentage:", round((despairVal/totalVal), 2), "%")
+        print(f"# of People Who Enjoy Them: {joyVal} \nPercentage: {roundJoyVal}%")
+        print(f"# of People who are Indifferent To Them: {mehVal} \nPercentage: {roundMehVal}%")
+        print(f"# of People who Despise Them: {despairVal} \nPercentage: {roundDespairVal}%")
         print()
 
         ##### Gender breakdown of enjoy/indifferent/dislike/non-answer.
@@ -171,51 +172,61 @@ def main():
         femaleJoy = len(candy[(candy['gender'] == 'Female') & (candy[currentlySearch] == 'JOY')])
         femaleMeh = len(candy[(candy['gender'] == 'Female') & (candy[currentlySearch] == 'MEH')])
         femaleDespair = len(candy[(candy['gender'] == 'Female') & (candy[currentlySearch] == 'DESPAIR')])
-
-        # Used to filter out women who did not answer for the candy.
         femaleTotal = femaleJoy + femaleMeh + femaleDespair
 
-        # Calculate how many women (like/indifferent/dislike) the candy.
+        # Calculates percentage and reassigns.
+        femaleJoy = round((femaleJoy/femaleTotal), 2)
+        femaleMeh = round((femaleMeh/femaleTotal), 2)
+        femaleDespair = round((femaleDespair/femaleTotal), 2)
+
+        # Calculate how many men (like/indifferent/dislike) the candy.
         maleJoy = len(candy[(candy['gender'] == 'Male') & (candy[currentlySearch] == 'JOY')])
         maleMeh = len(candy[(candy['gender'] == 'Male') & (candy[currentlySearch] == 'MEH')])
         maleDespair = len(candy[(candy['gender'] == 'Male') & (candy[currentlySearch] == 'DESPAIR')])
-
-        # Used to filter out men who did not answer for the candy.
         maleTotal = maleJoy + maleMeh + maleDespair
 
-        # Display # and % of women who responded for each (like/indifferent/dislike).
-        print("# of Women who Enjoy Them:", femaleJoy, "\nPercentage:", round((femaleJoy/femaleTotal), 2), "%")
-        print("# of Women who are Indifferent To Them:", femaleMeh, "\nPercentage:", round((femaleMeh/femaleTotal), 2), "%")
-        print("# of Women who Despise Them:", femaleDespair, "\nPercentage:", round((femaleDespair/femaleTotal), 2), "%")
+        # Calculates percentage and reassigns.
+        maleJoy = round((maleJoy/maleTotal), 2)
+        maleMeh = round((maleMeh/maleTotal), 2)
+        maleDespair = round((maleDespair/maleTotal), 2)
+
+        # Display % of women who responded for each (like/indifferent/dislike).
+        print(f"Percent of Women who Enjoy Them: {femaleJoy}%")
+        print(f"Percent of Women who are Indifferent To Them: {femaleMeh}%")
+        print(f"Percent of Women who Despise Them: {femaleDespair}%")
         print()
 
-        # Display # and % of men who responded for each (like/indifferent/dislike).
-        print("# of Men who Enjoy Them:", maleJoy, "\nPercentage:", round((maleJoy/maleTotal), 2), "%")
-        print("# of Men who are Indifferent To Them:", maleMeh, "\nPercentage:", round((maleMeh/maleTotal), 2), "%")
-        print("# of Men who Despise Them:", maleDespair, "\nPercentage:", round((maleDespair/maleTotal), 2), "%")
+        # Display % of men who responded for each (like/indifferent/dislike).
+        print(f"Percent of Men who Enjoy Them: {maleJoy}%")
+        print(f"Percent of Men who are Indifferent To Them: {maleMeh}%")
+        print(f"Percent of Men who Despise Them: {maleDespair}%")
         print()
 
-        ##### Age breakdown of enjoying candy type.
+        ##### Age breakdown of enjoy/indifferent/dislike/non-answer.
 
         ### Child
         numChild = len(candy[(candy['age'] > 0) & (candy['age'] <= 14)])
         childJoy = len(candy[((candy['age'] > 0) & (candy['age'] <= 14)) & (candy[currentlySearch] == 'JOY')])
-        print("# of Children (1 to 14) who Enjoy Them:", childJoy, "\nPercentage:", round((childJoy/numChild), 2), "%")
+        childJoy = round((childJoy/numChild), 2)
+        print(f"Percent of Children (1 to 14) who Enjoy Them: {childJoy}%")
 
         ### Youth
         numYouth = len(candy[(candy['age'] >= 15) & (candy['age'] <= 24)])
         youthJoy = len(candy[((candy['age'] >= 15) & (candy['age'] <= 24)) & (candy[currentlySearch] == 'JOY')])
-        print("# of Youths (15 to 24) who Enjoy Them:", youthJoy, "\nPercentage:", round((youthJoy/numYouth), 2), "%")
+        youthJoy = round((youthJoy/numYouth), 2)
+        print(f"Percent of Youths (15 to 24) who Enjoy Them: {youthJoy}%")
 
         ### Adult
         numAdult = len(candy[(candy['age'] >= 25) & (candy['age'] <= 64)])
         adultJoy = len(candy[((candy['age'] >= 25) & (candy['age'] <= 64)) & (candy[currentlySearch] == 'JOY')])
-        print("# of Adults (25 to 64) who Enjoy Them:", adultJoy, "\nPercentage:", round((adultJoy/numAdult), 2), "%")
+        adultJoy = round((adultJoy/numAdult), 2)
+        print(f"Percent of Adults (25 to 64) who Enjoy Them: {adultJoy}%")
 
         ### Senior
         numSenior = len(candy[candy['age'] >= 65])
         seniorJoy = len(candy[(candy['age'] >= 65) & (candy[currentlySearch] == 'JOY')])
-        print("# of Seniors (65+) who Enjoy Them:", seniorJoy, "\nPercentage:", round((seniorJoy/numSenior), 2), "%")
+        seniorJoy = round((seniorJoy/numSenior), 2)
+        print(f"Percent of Seniors (65+) who Enjoy Them: {seniorJoy}%")
 
         # Used to allow user to read presented information before repeating.
         input("Press Enter to continue...")
